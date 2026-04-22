@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KINETIC·SOUL — Gen-Art Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- CANVAS -->
+    <canvas id="canvas"></canvas>
+
+    <!-- HUD TOP -->
+    <header class="hud hud--top">
+      <div class="hud__logo">
+        <span class="hud__logo-text">KINETIC</span>
+        <span class="hud__logo-dot">·</span>
+        <span class="hud__logo-text hud__logo-text--alt">SOUL</span>
+      </div>
+      <div class="hud__stats">
+        <div class="hud__stat">
+          <span class="hud__stat-label">FPS</span>
+          <span class="hud__stat-value" id="stat-fps">--</span>
+        </div>
+        <div class="hud__stat">
+          <span class="hud__stat-label">PARTICLES</span>
+          <span class="hud__stat-value" id="stat-particles">--</span>
+        </div>
+        <div class="hud__stat">
+          <span class="hud__stat-label">MODE</span>
+          <span class="hud__stat-value" id="stat-mode">GALAXY</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- PANEL KIRI — Visual Modes -->
+    <nav class="panel panel--left" id="panel-modes">
+      <div class="panel__label">VISUAL MODE</div>
+      <div class="panel__buttons" id="mode-buttons">
+        <button class="mode-btn mode-btn--active" data-mode="galaxy">
+          <span class="mode-btn__icon">✦</span>
+          <span class="mode-btn__name">GALAXY</span>
+          <span class="mode-btn__desc">Orbital drift</span>
+        </button>
+        <button class="mode-btn" data-mode="web">
+          <span class="mode-btn__icon">⬡</span>
+          <span class="mode-btn__name">WEB</span>
+          <span class="mode-btn__desc">Neural mesh</span>
+        </button>
+        <button class="mode-btn" data-mode="explosion">
+          <span class="mode-btn__icon">◈</span>
+          <span class="mode-btn__name">EXPLOSION</span>
+          <span class="mode-btn__desc">Burst field</span>
+        </button>
+      </div>
+
+      <div class="panel__divider"></div>
+
+      <div class="panel__label">COLOR PALETTE</div>
+      <div class="panel__palettes" id="palette-buttons">
+        <button
+          class="palette-btn palette-btn--active"
+          data-palette="cyberpunk"
+          title="Cyberpunk"
+        >
+          <span
+            class="palette-btn__swatch"
+            style="
+              background: linear-gradient(135deg, #ff006e, #8338ec, #3a86ff);
+            "
+          ></span>
+          <span class="palette-btn__name">NEON</span>
+        </button>
+        <button class="palette-btn" data-palette="aurora" title="Aurora">
+          <span
+            class="palette-btn__swatch"
+            style="
+              background: linear-gradient(135deg, #00f5d4, #00bbf9, #9b5de5);
+            "
+          ></span>
+          <span class="palette-btn__name">AURORA</span>
+        </button>
+        <button class="palette-btn" data-palette="fire" title="Fire">
+          <span
+            class="palette-btn__swatch"
+            style="
+              background: linear-gradient(135deg, #ffbe0b, #fb5607, #ff006e);
+            "
+          ></span>
+          <span class="palette-btn__name">FIRE</span>
+        </button>
+        <button class="palette-btn" data-palette="ocean" title="Ocean">
+          <span
+            class="palette-btn__swatch"
+            style="
+              background: linear-gradient(135deg, #0077b6, #00b4d8, #90e0ef);
+            "
+          ></span>
+          <span class="palette-btn__name">OCEAN</span>
+        </button>
+        <button class="palette-btn" data-palette="void" title="Void">
+          <span
+            class="palette-btn__swatch"
+            style="
+              background: linear-gradient(135deg, #7400b8, #6930c3, #5e60ce);
+            "
+          ></span>
+          <span class="palette-btn__name">VOID</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- PANEL KANAN — Controls -->
+    <aside class="panel panel--right" id="panel-controls">
+      <div class="panel__label">PARAMETERS</div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>PARTICLES</span>
+          <span class="control-value" id="val-count">800</span>
+        </label>
+        <div class="slider-track">
+          <input
+            type="range"
+            class="slider"
+            id="ctrl-count"
+            min="100"
+            max="2000"
+            value="800"
+            step="50"
+          />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>GRAVITY</span>
+          <span class="control-value" id="val-gravity">60</span>
+        </label>
+        <div class="slider-track">
+          <input
+            type="range"
+            class="slider"
+            id="ctrl-gravity"
+            min="0"
+            max="200"
+            value="60"
+          />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>SPEED</span>
+          <span class="control-value" id="val-speed">50</span>
+        </label>
+        <div class="slider-track">
+          <input
+            type="range"
+            class="slider"
+            id="ctrl-speed"
+            min="1"
+            max="100"
+            value="50"
+          />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>PARTICLE SIZE</span>
+          <span class="control-value" id="val-size">2</span>
+        </label>
+        <div class="slider-track">
+          <input
+            type="range"
+            class="slider"
+            id="ctrl-size"
+            min="1"
+            max="8"
+            value="2"
+            step="0.5"
+          />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>TRAIL LENGTH</span>
+          <span class="control-value" id="val-trail">15</span>
+        </label>
+        <div class="slider-track">
+          <input
+            type="range"
+            class="slider"
+            id="ctrl-trail"
+            min="1"
+            max="50"
+            value="15"
+          />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>BLOOM</span>
+          <span class="control-value" id="val-bloom">70</span>
+        </label>
+        <div class="slider-track">
+          <input
+            type="range"
+            class="slider"
+            id="ctrl-bloom"
+            min="0"
+            max="100"
+            value="70"
+          />
+        </div>
+      </div>
+
+      <div class="panel__divider"></div>
+
+      <div class="panel__label">AUDIO REACTIVE</div>
+      <div class="toggle-row">
+        <span class="toggle-label">MIC INPUT</span>
+        <label class="toggle">
+          <input type="checkbox" id="ctrl-audio" />
+          <span class="toggle__track">
+            <span class="toggle__thumb"></span>
+          </span>
+        </label>
+      </div>
+      <div class="audio-bar-container" id="audio-bars">
+        <div class="audio-bar" id="abar-bass"></div>
+        <div class="audio-bar" id="abar-mid"></div>
+        <div class="audio-bar" id="abar-treble"></div>
+      </div>
+      <div class="audio-labels">
+        <span>BASS</span><span>MID</span><span>TREBLE</span>
+      </div>
+
+      <div class="panel__divider"></div>
+
+      <div class="panel__label">ACTIONS</div>
+      <button class="action-btn" id="btn-screenshot">
+        <span>⬇</span> EXPORT PNG
+      </button>
+      <button class="action-btn action-btn--secondary" id="btn-reset">
+        <span>↺</span> RESET
+      </button>
+    </aside>
+
+    <!-- PANEL BAWAH KIRI — Animation Presets -->
+    <nav class="presets-bar" id="presets-bar">
+      <div class="presets-bar__label">ANIMATION PRESETS</div>
+      <div class="presets-bar__list" id="preset-buttons">
+        <button class="preset-btn" data-preset="cosmos">
+          <span class="preset-btn__icon">🌌</span>
+          <span class="preset-btn__name">COSMOS</span>
+        </button>
+        <button class="preset-btn" data-preset="storm">
+          <span class="preset-btn__icon">⚡</span>
+          <span class="preset-btn__name">STORM</span>
+        </button>
+        <button class="preset-btn" data-preset="synaptic">
+          <span class="preset-btn__icon">🧠</span>
+          <span class="preset-btn__name">SYNAPTIC</span>
+        </button>
+        <button class="preset-btn" data-preset="inferno">
+          <span class="preset-btn__icon">🔥</span>
+          <span class="preset-btn__name">INFERNO</span>
+        </button>
+        <button class="preset-btn" data-preset="deepsea">
+          <span class="preset-btn__icon">🌊</span>
+          <span class="preset-btn__name">DEEP SEA</span>
+        </button>
+        <button class="preset-btn" data-preset="void">
+          <span class="preset-btn__icon">◉</span>
+          <span class="preset-btn__name">VOID RIFT</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- BOTTOM HUD — interaction hints -->
+    <footer class="hud hud--bottom">
+      <div class="hint">
+        <span class="hint__key">MOVE</span> cursor to attract
+      </div>
+      <div class="hint"><span class="hint__key">CLICK</span> to explode</div>
+      <div class="hint"><span class="hint__key">SCROLL</span> to resize</div>
+      <div class="hint"><span class="hint__key">SPACE</span> to freeze</div>
+    </footer>
+
+    <!-- AUDIO status overlay -->
+    <div class="audio-status" id="audio-status" style="display: none">
+      <div class="audio-status__icon">🎙</div>
+      <div class="audio-status__text">LISTENING</div>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>
